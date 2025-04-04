@@ -1,65 +1,77 @@
-menu = [
-    {
-        "title":"SYSTEM",
-        "sub_menu":[
+from get_ip import get_ip
+import lcd_controls
+
+
+class Menu():
+    def __init__(self, LCD):
+        self.lcd = lcd_controls.LCD_Controls(LCD)
+        self.menu = [
             {
-                "title":"SHUTDOWN",
+                "title":"SYSTEM",
                 "sub_menu":[
                     {
-                        "title":"Yes",
-                        "sub_menu":[],
-                        "command":["sudo", "shutdown", "-h", "now"],
-                        "comment": "Shutting\n Down"
+                        "title":"SHUTDOWN",
+                        "sub_menu":[
+                            {
+                                "title":"No",
+                                "command":["No"],
+                            },
+                            {
+                                "title":"Yes",
+                                "command":["sudo", "shutdown", "-h", "now"],
+                                "comment": "Shutting\n Down",
+                                "sleep_time": 3,
+                            },
+                        ],
                     },
                     {
-                        "title":"No",
-                        "sub_menu":[],
-                        "command":["No"],
-                        "comment": ""
+                        "title":"RESTART",
+                        "sub_menu":[
+                            {
+                                "title":"No",
+                                "command":["No"],
+                            },
+                            {
+                                "title":"Yes",
+                                "command":["sudo", "reboot"],
+                                "comment": "Restarting",
+                                "sleep_time": 3,
+                            },
+                        ],
+                    },
+                    {
+                        "title":"GET IP",
+                        "p_command":get_ip,
+                        "comment": f"IP:\n{get_ip()}",
+                        "font_size": 15,
+                    },
+                    {
+                        "title":"BRIGHTNESS",
+                        "sub_menu":[
+                            {
+                                "title":"UP",
+                                "p_command":self.lcd.brightness_up,
+                                "comment": "UP",
+                            },
+                            {
+                                "title":"DOWN",
+                                "p_command":self.lcd.brightness_down,
+                                "comment": "DOWN",
+                            },
+                        ]
                     },
                 ],
-                "command":[],
-                "comment": ""
             },
             {
-                "title":"RESTART",
-                "sub_menu":[
-                    {
-                        "title":"Yes",
-                        "sub_menu":[],
-                        "command":["sudo", "reboot"],
-                        "comment": "Restarting"
-                    },
-                    {
-                        "title":"No",
-                        "sub_menu":[],
-                        "command":["No"],
-                        "comment": ""
-                    },
-                ],
-                "command":[],
-                "comment": ""
-            },
-            {
-                "title":"GET IP",
+                "title":"MENU 2",
                 "sub_menu":[],
-                "command":["ip", "a" " | ", "grep", "wlan0"],
+                "command":[],
                 "comment": "comment"
             },
-        ],
-        "command":[],
-        "comment": "comment"
-    },
-    {
-        "title":"MENU 2",
-        "sub_menu":[],
-        "command":[],
-        "comment": "comment"
-    },
-    {
-        "title":"MENU 3",
-        "sub_menu":[],
-        "command":[],
-        "comment": "comment"
-    },
-]
+            {
+                "title":"MENU 3",
+                "sub_menu":[],
+                "command":[],
+                "comment": "comment"
+            },
+        ]
