@@ -7,9 +7,9 @@ class LCD_Controls(object):
     def brightness_up(self):
         self.duty_cycle += 10
         self.lcd.bl_DutyCycle(self.duty_cycle)
-        print("brightness up")
 
     def brightness_down(self):
         self.duty_cycle -= 10
         self.lcd.bl_DutyCycle(self.duty_cycle)
-        print("brightness down")
+        if self.duty_cycle < 20:
+             self.duty_cycle = 20
