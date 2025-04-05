@@ -13,72 +13,51 @@ class Input_Handler():
             self.LCD.GPIO_KEY2_PIN,
             self.LCD.GPIO_KEY3_PIN,
         ]
+        self.index_mode_on = True
 
-    def update(self):
-        for index, pin in enumerate(self.GPIO_KEYS):
-            if self.LCD.digital_read(pin) == 1:
-                self.button_states[index] = True
-            else:
-                self.button_states[index] = False
+    def update(self, menu_system):
+        self.get_button_states(menu_system)
 
-#
-# global , menu_y, current_menu, parrent_menu, running_command_flag
-#
-#
-# item = current_menu[index % len(current_menu)]
-#
-#
-#     def inputs(self):
-#
-# if LCD.digital_read(LCD.GPIO_KEY_UP_PIN ) == 1:
-#     if not button_up:
-#         button_up = True
-#         index -= 1
-# else:
-#     button_up = False
-#
-# if LCD.digital_read(LCD.GPIO_KEY_DOWN_PIN ) == 1:
-#     if not button_down:
-#         button_down = True
-#         index += 1
-# else:
-#     button_down = False
-#
-#
-# if LCD.digital_read(LCD.GPIO_KEY1_PIN ) == 1:#Back Button
-#     if not button_key1:
-#         button_key1 = True
-#         running_command_flag = False
-#         index = 0
-#         if parrent_menu:
-#             current_menu = parrent_menu[-1]
-#             parrent_menu.pop()
-#
-# else:
-#     button_key1 = False
-#
-#
-#
-# if LCD.digital_read(LCD.GPIO_KEY_PRESS_PIN ) == 1:
-#     if not button_press_pin:
-#         button_press_pin = True
-#         if item.get("sub_menu"):
-#             parrent_menu.append(current_menu)
-#             current_menu = current_menu[index % len(current_menu)]["sub_menu"]
-#             index = 0
-#
-#         elif item.get("command"):
-#             if item["command"][0] == "No":   #Go Back
-#                 current_menu = parrent_menu[-1]
-#                 parrent_menu.pop()
-#         elif item.get("p_command"):
-#             item["p_command"]()
-#             running_command_flag = True
-#
-#
-#
-#
-# else: # button is pressed:
-#     button_press_pin = False
-#
-# menu_y = (index % len(current_menu)) * font_size
+
+
+    def get_index(self, menu):
+        l = len(menu)
+        if l > 0:
+            return self.index % l
+        else:
+            return 0
+
+
+    def get_button_states(self, menu_system):
+        # Up Button
+        if self.LCD.digital_read(self.GPIO_KEYS[0]):
+            if not self.button_states[0] and self.index_mode_on:
+                self.index -= 1
+                self.button_states[0] = True
+        else:
+            self.button_states[0] = False
+
+        # Down Button
+        if self.LCD.digital_read(self.GPIO_KEYS[1]):
+            if not self.button_states[1] and self.index_mode_on:
+                self.index += 1
+                self.button_states[1] = True
+        else:
+            self.button_states[1] = False
+
+        # Center Button
+        if self.LCD.digital_read(self.GPIO_KEYS[4]):
+            if not self.button_states[4]:
+                menu_system.load()
+                self.button_states[4] = True
+        else:
+            self.button_states[4] = False
+
+
+        # Key3 Back Button
+        if self.LCD.digital_read(self.GPIO_KEYS[7]):
+            if not self.button_states[7]:
+                menu_system.back()
+                self.button_states[7] = True
+        else:
+            self.button_states[7] = False

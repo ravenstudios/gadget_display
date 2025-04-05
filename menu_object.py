@@ -1,6 +1,6 @@
 class Menu_Object(object):
 
-    def __init__(self, title=None, sub_menu=None, command=None, pycommand=None, comment=None, font_size=None):
+    def __init__(self, title=None, sub_menu=None, command=None, py_command=None, comment=None, font_size = None):
         self.title = title
         self.sub_menu = sub_menu
         self.command = command
