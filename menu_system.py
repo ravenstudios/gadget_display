@@ -26,8 +26,12 @@ def system_menu(LCD):
     reboot_no = Menu_Object(title="No")
     reboot_menu = Menu_Object(title="Reboot", sub_menu=[reboot_yes, reboot_no])
 
-    brightness_up = Menu_Object(title="UP", py_command=lcd.brightness_up)
-    brightness_down = Menu_Object(title="UP", py_command=lcd.brightness_down)
+<<<<<<< HEAD
+    
+=======
+    brightness_up = Menu_Object(title="UP", py_command=lcd.brightness_up, comment="UP")
+    brightness_down = Menu_Object(title="DOWN", py_command=lcd.brightness_down, comment="DOWN")
+>>>>>>> class
     brightness = Menu_Object(title="Brightness", sub_menu=[brightness_up, brightness_down])
 
     system_menu.sub_menu = [
