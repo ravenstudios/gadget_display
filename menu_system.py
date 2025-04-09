@@ -91,6 +91,7 @@ class Menu_System():
             self.ip.index_mode_on = True
 
     def load(self):
+
         if self.current_menu[self.ip.get_index(self.current_menu)].sub_menu:
             self.parrent_menu.append(self.current_menu)
             self.current_menu = self.current_menu[self.ip.get_index(self.current_menu)].sub_menu
@@ -107,7 +108,7 @@ class Menu_System():
                 self.parrent_menu.append(self.current_menu)
             self.command_flag = True
             self.command = self.current_menu[self.ip.get_index(self.current_menu)].command
-
+        # self.ip.index = 0
 
 
     def get_font(self, size):

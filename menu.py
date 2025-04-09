@@ -11,11 +11,11 @@ def system_menu(LCD):
 
     shutdown_yes = Menu_Object(title="Yes", command=["sudo", "shutdown", "-h", "now"], comment="Shuting\nDown...")
     shutdown_no = Menu_Object(title="No")
-    shutdown_menu = Menu_Object(title="Shutdown", sub_menu=[shutdown_yes, shutdown_no])
+    shutdown_menu = Menu_Object(title="Shutdown", sub_menu=[shutdown_no, shutdown_yes])
 
     reboot_yes = Menu_Object(title="Yes", command=["sudo", "reboot"], font_size=14, comment="Rebooting...")
     reboot_no = Menu_Object(title="No")
-    reboot_menu = Menu_Object(title="Reboot", sub_menu=[reboot_yes, reboot_no])
+    reboot_menu = Menu_Object(title="Reboot", sub_menu=[reboot_no, reboot_yes])
 
     brightness_up = Menu_Object(title="UP", py_command=lcd.brightness_up, comment="UP")
     brightness_down = Menu_Object(title="DOWN", py_command=lcd.brightness_down, comment="DOWN")
