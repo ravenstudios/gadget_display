@@ -24,9 +24,10 @@ class Menu_System():
         self.font_size = 20
         self.command_flag = False
         self.py_command_flag = False
+        self.command = None
+        self.py_command = None
         self.keyboard = keyboard.Keyboard(self.LCD, self.ip)
-        self.current_menu = main_menu(self.LCD, self.keyboard).sub_menu
-
+        self.current_menu = main_menu(self.LCD, self.keyboard, self).sub_menu
     def update(self):
         self.keyboard.update()
         self.ip.update(self)
@@ -50,26 +51,22 @@ class Menu_System():
 
 
             elif self.py_command_flag:
-                command = self.current_menu[self.ip.get_index(self.current_menu)].py_command()
                 if self.current_menu[self.ip.get_index(self.current_menu)].font_size:
                     font_size = self.current_menu[self.ip.get_index(self.current_menu)].font_size
                     font = self.get_font(font_size)
-                if command:
-                    draw.text((x_pad, y_pad),  command, fill = "BLUE", font=font)
-                self.parrent_menu.append(self.current_menu)
-                self.ip.index_mode_on = False
+                if self.command:
+                    draw.text((x_pad, y_pad),  self.command, fill = "BLUE", font=font)
+
 
             elif self.command_flag:
-                command = self.current_menu[self.ip.get_index(self.current_menu)].command
                 if self.current_menu[self.ip.get_index(self.current_menu)].font_size:
                     font_size = self.current_menu[self.ip.get_index(self.current_menu)].font_size
                     font = self.get_font(font_size)
-                draw.text((x_pad, y_pad),  comment, fill = "BLUE", font=font)
-                self.LCD.LCD_ShowImage(image,0,0)
-                time.sleep(3)
-                subprocess.run(command)
-                self.parrent_menu.append(self.current_menu)
-                self.ip.index_mode_on = False
+                if self.command:
+                    draw.text((x_pad, y_pad),  self.current_menu[self.ip.get_index(self.current_menu)].comment, fill = "BLUE", font=font)
+                    self.LCD.LCD_ShowImage(image,0,0)
+                    time.sleep(3)
+                    subprocess.run(self.current_menu[self.ip.get_index(self.current_menu)].command)
 
 
             else:
@@ -78,20 +75,20 @@ class Menu_System():
                 for i, item in enumerate(self.current_menu):
                     draw.text((x_pad, i * self.font_size),  item.title, fill = "BLUE", font=font)
 
-            if not self.keyboard.is_active:
-                batt = f"{float(get_battery()):.0f}"
-                draw.text((75, self.LCD.height - self.font_size - 1),  f"\U000026A1{batt}%", fill = "WHITE", font=font)
+            # if not self.keyboard.is_active:
+            #     batt = f"{float(get_battery()):.0f}"
+            #     draw.text((75, self.LCD.height - self.font_size - 1),  f"\U000026A1{batt}%", fill = "WHITE", font=font)
             self.LCD.LCD_ShowImage(image,0,0)
 
 
-    def back(self):
+    def back(self, response=None):
+
         if self.parrent_menu:
-            self.current_menu = self.parrent_menu[-1]
-            self.parrent_menu.pop()
+            self.current_menu = self.parrent_menu.pop()
             self.command_flag = False
+            self.py_command_flag = False
+            self.keyboard.is_active = False
             self.ip.index_mode_on = True
-
-
 
     def load(self):
         if self.current_menu[self.ip.get_index(self.current_menu)].sub_menu:
@@ -99,10 +96,17 @@ class Menu_System():
             self.current_menu = self.current_menu[self.ip.get_index(self.current_menu)].sub_menu
 
         elif self.current_menu[self.ip.get_index(self.current_menu)].py_command:
+            if self.current_menu not in self.parrent_menu:
+                self.parrent_menu.append(self.current_menu)
             self.py_command_flag = True
+            self.command = self.current_menu[self.ip.get_index(self.current_menu)].py_command()
+
 
         elif self.current_menu[self.ip.get_index(self.current_menu)].command:
+            if self.current_menu not in self.parrent_menu:
+                self.parrent_menu.append(self.current_menu)
             self.command_flag = True
+            self.command = self.current_menu[self.ip.get_index(self.current_menu)].command
 
 
 

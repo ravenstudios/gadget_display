@@ -5,6 +5,7 @@ class Keyboard():
         self.is_shifted = False
         self.font_size = 13
         self.ip = inuput_handler
+        self.call_back = None
 
         self.rows = [
             [
@@ -42,16 +43,16 @@ class Keyboard():
     def update(self):
         if self.is_active:
             self.ip.update_keyboard(self)
-        print(self.is_active)
 
     def enter(self):
         self.is_active = False
+        self.call_back(self.output_string)
 
-    def activate(self):
+    def activate(self, call_back):
         self.is_active = True
+        self.call_back = call_back
 
     def select(self):
-        print("select")
         char = self.selected_rows[self.y][self.x]
         if char == "SP":
             self.output_string += " "
